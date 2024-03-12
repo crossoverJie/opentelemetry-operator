@@ -15,6 +15,7 @@
 package instrumentation
 
 import (
+	"fmt"
 	corev1 "k8s.io/api/core/v1"
 
 	"github.com/open-telemetry/opentelemetry-operator/apis/v1alpha1"
@@ -22,7 +23,7 @@ import (
 
 const (
 	envJavaToolsOptions = "JAVA_TOOL_OPTIONS"
-	javaJVMArgument     = " -javaagent:/otel-auto-instrumentation/javaagent.jar"
+	javaAgent           = " -javaagent:/otel-auto-instrumentation/javaagent.jar"
 )
 
 func injectJavaagent(javaSpec v1alpha1.Java, pod corev1.Pod, index int) (corev1.Pod, error) {
@@ -40,6 +41,11 @@ func injectJavaagent(javaSpec v1alpha1.Java, pod corev1.Pod, index int) (corev1.
 		if idx == -1 {
 			container.Env = append(container.Env, env)
 		}
+	}
+
+	javaJVMArgument := javaAgent
+	if javaSpec.Extensions != "" {
+		javaJVMArgument = javaAgent + " " + fmt.Sprintf("-Dotel.javaagent.extensions=%s", javaSpec.Extensions)
 	}
 
 	idx := getIndexOfEnv(container.Env, envJavaToolsOptions)
@@ -71,6 +77,17 @@ func injectJavaagent(javaSpec v1alpha1.Java, pod corev1.Pod, index int) (corev1.
 			Name:      initContainerName,
 			Image:     javaSpec.Image,
 			Command:   []string{"cp", "/javaagent.jar", "/otel-auto-instrumentation/javaagent.jar"},
+			Resources: javaSpec.Resources,
+			VolumeMounts: []corev1.VolumeMount{{
+				Name:      volumeName,
+				MountPath: "/otel-auto-instrumentation",
+			}},
+		})
+
+		pod.Spec.InitContainers = append(pod.Spec.InitContainers, corev1.Container{
+			Name:      initContainerName + "-extensions",
+			Image:     javaSpec.Image,
+			Command:   []string{"cp", javaSpec.Extensions, "/otel-auto-instrumentation" + javaSpec.Extensions},
 			Resources: javaSpec.Resources,
 			VolumeMounts: []corev1.VolumeMount{{
 				Name:      volumeName,

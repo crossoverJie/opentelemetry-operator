@@ -889,6 +889,9 @@ spec:
                       - name
                       type: object
                     type: array
+                  extensions:
+                    description: Extensions defines java specific extensions.
+                    type: string
                   image:
                     description: Image is a container image with javaagent auto-instrumentation
                       JAR.

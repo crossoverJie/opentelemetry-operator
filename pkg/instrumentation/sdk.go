@@ -68,6 +68,7 @@ func (i *sdkInjector) inject(ctx context.Context, insts languageInstrumentations
 	if insts.Java != nil {
 		otelinst := *insts.Java
 		var err error
+		fmt.Println(fmt.Printf("injecting java pod:%s, namespace:%s, extentions:%s", pod.Name, pod.Namespace, otelinst.Spec.Java.Extensions))
 		i.logger.V(1).Info("injecting Java instrumentation into pod", "otelinst-namespace", otelinst.Namespace, "otelinst-name", otelinst.Name)
 		pod, err = injectJavaagent(otelinst.Spec.Java, pod, index)
 		if err != nil {

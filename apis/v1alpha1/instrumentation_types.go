@@ -133,6 +133,10 @@ type Java struct {
 	// Resources describes the compute resource requirements.
 	// +optional
 	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
+
+	// Extensions defines java specific extensions.
+	// +optional
+	Extensions string `json:"extensions,omitempty"`
 }
 
 // NodeJS defines NodeJS SDK and instrumentation configuration.

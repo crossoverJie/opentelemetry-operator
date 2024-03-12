@@ -76,7 +76,7 @@ func TestInjectJavaagent(t *testing.T) {
 							Env: []corev1.EnvVar{
 								{
 									Name:  "JAVA_TOOL_OPTIONS",
-									Value: javaJVMArgument,
+									Value: javaAgent,
 								},
 							},
 						},
@@ -137,7 +137,7 @@ func TestInjectJavaagent(t *testing.T) {
 							Env: []corev1.EnvVar{
 								{
 									Name:  "JAVA_TOOL_OPTIONS",
-									Value: "-Dbaz=bar" + javaJVMArgument,
+									Value: "-Dbaz=bar" + javaAgent,
 								},
 							},
 						},
