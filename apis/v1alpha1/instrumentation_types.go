@@ -136,7 +136,15 @@ type Java struct {
 
 	// Extensions defines java specific extensions.
 	// +optional
-	Extensions string `json:"extensions,omitempty"`
+	Extensions *Extensions `json:"extensions,omitempty"`
+}
+
+type Extensions struct {
+	// Image is a container image with extensions auto-instrumentation JAR.
+	Image string `json:"image"`
+
+	// Dir is a directory with extensions auto-instrumentation JAR.
+	Dir string `json:"dir"`
 }
 
 // NodeJS defines NodeJS SDK and instrumentation configuration.
