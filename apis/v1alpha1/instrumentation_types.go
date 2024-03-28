@@ -22,6 +22,11 @@ import (
 
 // InstrumentationSpec defines the desired state of OpenTelemetry SDK and instrumentation.
 type InstrumentationSpec struct {
+
+	// Selector is the selector label of injected Object
+	// +optional
+	Selector *metav1.LabelSelector `json:"selector,omitempty"`
+
 	// Exporter defines exporter configuration.
 	// +optional
 	Exporter `json:"exporter,omitempty"`
@@ -133,6 +138,18 @@ type Java struct {
 	// Resources describes the compute resource requirements.
 	// +optional
 	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
+
+	// Extensions defines java specific extensions.
+	// +optional
+	Extensions []Extensions `json:"extensions,omitempty"`
+}
+
+type Extensions struct {
+	// Image is a container image with extensions auto-instrumentation JAR.
+	Image string `json:"image"`
+
+	// Dir is a directory with extensions auto-instrumentation JAR.
+	Dir string `json:"dir"`
 }
 
 // NodeJS defines NodeJS SDK and instrumentation configuration.
