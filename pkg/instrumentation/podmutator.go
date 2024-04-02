@@ -427,6 +427,6 @@ func (pm *instPodMutator) selectInstrumentationInstanceFromNamespace(ctx context
 	case s > 1:
 		return nil, errMultipleInstancesPossible
 	default:
-		return &otelInsts.Items[0], nil
+		return &availableInstrument[0], nil
 	}
 }
