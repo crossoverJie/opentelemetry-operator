@@ -424,7 +424,9 @@ func (pm *instPodMutator) selectInstrumentationInstanceFromNamespace(ctx context
 	switch s := len(availableInstrument); {
 	case s == 0:
 		return nil, errNoInstancesAvailable
+	case s > 1:
+		return nil, errMultipleInstancesPossible
 	default:
-		return &availableInstrument[len(availableInstrument)-1], nil
+		return &otelInsts.Items[0], nil
 	}
 }
